@@ -13,11 +13,11 @@ public class HttpClientRealisation implements HttpClient {
     @Override
     public String get(String url, Map<String, String> headers, Map<String, String> params) {
         try {
-            int counter = 0; // для нескольких параметров
+            int counter = 0;
             StringBuilder stringBuilder = new StringBuilder(url);
-            stringBuilder.append("?"); //знак вопроса, чтобы передать параметр, append - обновляет строку
+            stringBuilder.append("?");
 
-            for (String key : params.keySet()) { //проходимся по ключам
+            for (String key : params.keySet()) {
                 if (counter != 0) {
                     stringBuilder.append("&");
                 }
@@ -25,17 +25,17 @@ public class HttpClientRealisation implements HttpClient {
                 counter++;
             }
             url = stringBuilder.toString();
-            URL url1 = new URL(url); //передаем измененную ссылку
+            URL url1 = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) url1.openConnection();
             StringBuilder content = new StringBuilder();
 
-            for (String key : headers.keySet()) { //проходимся
+            for (String key : headers.keySet()) {
                 connection.setRequestProperty(key, headers.get(key));
             }
             connection.setRequestMethod("GET");
             connection.setConnectTimeout(5000);
             connection.setReadTimeout(5000);
-            System.out.println(connection.getResponseCode()); //возвращает ответ кода
+            System.out.println(connection.getResponseCode());
 
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
 
@@ -55,11 +55,12 @@ public class HttpClientRealisation implements HttpClient {
     @Override
     public String post(String url, Map<String, String> headers, Map<String, String> params) {
         try {
+            URL url2 = new URL(url);
             int counter = 0;
-            StringBuilder stringBuilder = new StringBuilder(url);
+            StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("{");
 
-            for (String key : params.keySet()) { //проходимся по ключам
+            for (String key : params.keySet()) {
                 if (counter != 0) {
                     stringBuilder.append(",");
                 }
@@ -69,7 +70,6 @@ public class HttpClientRealisation implements HttpClient {
             stringBuilder.append("}");
             url = stringBuilder.toString();
 
-            URL url2 = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) url2.openConnection();
             connection.setRequestMethod("POST");
 
